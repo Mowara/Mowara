@@ -469,7 +469,7 @@ class CRMLead(models.Model):
         """Top 10 Salesperson revenue Table"""
         top_revenue = []
         date_from = datetime.now().strftime('%Y-'+str(month)+'-01')
-        date_to = (datetime.now() + relativedelta(months=+1, day=1, days=-1)).strftime('%Y-'+str(month)+'-%d')
+        date_to = (datetime.now() + relativedelta(months=+1, day=1)).strftime('%Y-'+str(month)+'-%d')
 
         users = self.env['res.users'].search([('active', '=', True)])
         for user in users:
