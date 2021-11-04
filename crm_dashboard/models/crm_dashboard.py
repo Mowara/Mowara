@@ -388,7 +388,7 @@ class CRMLead(models.Model):
         date_from = datetime.now().strftime('%Y-%m-01')
         date_to = (datetime.now() + relativedelta(months=+1, day=1, days=-1)).strftime('%Y-%m-%d')
         month = datetime.now().strftime('%m')
-        users = self.env['res.users'].search([('is_published', '=', True)])
+        users = self.env['res.users'].search([('active', '=', True)])
         for user in users:
 
             self._cr.execute('''SELECT COUNT(*)	FROM public.calendar_event  where res_model = 'crm.lead'  and user_id=%s''' % user.id)
