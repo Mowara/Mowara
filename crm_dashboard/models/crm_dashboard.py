@@ -391,10 +391,10 @@ class CRMLead(models.Model):
         users = self.env['res.users'].search([('active', '=', True)])
         for user in users:
 
-            self._cr.execute('''SELECT COUNT(*)	FROM public.calendar_event  where res_model = 'crm.lead'  and user_id=%s''' % user.id)
+            self._cr.execute('''SELECT COUNT(*)	FROM public.calendar_event  where res_model = 'crm.lead' and create_date >= '%s' and create_date <= '%s'  and user_id=%s''' % (date_from, date_to, user.id))
             meetings = self._cr.dictfetchall()
             self._cr.execute('''select COUNT(*) from mail_activity
-                                 where res_model = 'crm.lead' and activity_type_id=3 and user_id = %s''' % user.id)
+                                 where res_model = 'crm.lead' and activity_type_id=3 and create_date >= '%s' and create_date <= '%s'and user_id = %s''' % (date_from, date_to, user.id))
             missed_meeting = self._cr.dictfetchall()
 
             self._cr.execute('''select  sum(expected_revenue) from crm_lead
