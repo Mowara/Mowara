@@ -468,8 +468,11 @@ class CRMLead(models.Model):
     def get_sp_month_summary(self, month):
         """Top 10 Salesperson revenue Table"""
         top_revenue = []
+        next_month = str(int(month) + 1)
+        if int(month) < 10:
+            next_month = '0'+str(int(month) + 1)
         date_from = datetime.now().strftime('%Y-'+str(month)+'-01')
-        date_to = (datetime.now() + relativedelta(months=+1, day=1)).strftime('%Y-'+str(month)+'-%d')
+        date_to = datetime.now().strftime('%Y-'+str(next_month)+'-01')
 
         users = self.env['res.users'].search([('active', '=', True)])
         for user in users:
