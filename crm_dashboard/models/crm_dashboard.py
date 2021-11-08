@@ -586,7 +586,7 @@ class CRMLead(models.Model):
             else:
                 rec_list.append(0)
             rec_list.append(opportunity)
-            if len(opportunity_total) > 0:
+            if len(opportunity_total) > 0 and opportunity_total[0]['sum']:
                 rec_list.append(opportunity_total[0]['sum'])
             else:
                 rec_list.append(0)
