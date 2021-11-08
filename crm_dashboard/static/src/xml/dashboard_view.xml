@@ -6,7 +6,7 @@
         </div>
     </t>
     <t t-name="LoginUser">
-        <section class="dashboard_main_section" id="main_section_login">
+        <section class="d-none dashboard_main_section" id="main_section_login">
             <div class="row">
                 <div class="col-sm-12 mb-4">
                     <div class="row">
@@ -35,7 +35,7 @@
     </t>
     <t t-name="Managercrm">
         <section class="dashboard_main_section" id="main_section_manager">
-            <div class="crm_dash_cards row">
+            <div class="d-none crm_dash_cards row">
                 <div class="col-sm-12 col-md-3">
                     <div class="dashboard-card card-shadow my_lead">
                         <div
@@ -223,7 +223,7 @@
                         </div>
                     </div>
                         <hr/>
-                        <table class="table table-hover" id="salesperson_revenue_table">
+                        <table class="table table-hover" id="salesperson_revenue_table" style="text-align:center;">
                             <thead>
                                 <tr>
                                     <th rowspan='3'>Sales Rep</th>
@@ -271,13 +271,13 @@
                                         <td><t t-esc="activity[5]"/></td>
                                         <td><t t-esc="activity[6]"/></td>
                                         <td><t t-esc="activity[7]"/></td>
-                                        <td><t t-esc="activity[8]"/></td>
+                                        <td><t t-esc="activity[8]"/>$</td>
                                         <td><t t-esc="activity[9]"/></td>
-                                        <td><t t-esc="activity[10]"/></td>
+                                        <td><t t-esc="activity[10]"/>$</td>
                                         <td><t t-esc="activity[11]"/></td>
-                                        <td><t t-esc="activity[12]"/></td>
+                                        <td><t t-esc="activity[12]"/>$</td>
                                         <td><t t-esc="activity[13]"/></td>
-                                        <td><t t-esc="activity[14]"/></td>
+                                        <td><t t-esc="activity[14]"/>$</td>
 
 
                                     </tr>

@@ -427,16 +427,41 @@ class CRMLead(models.Model):
                                     where  state = 'sale' and create_date >= '%s' and create_date <= '%s' AND  user_id = %s''' % (
             date_from, date_to, user.id))
             approved_quotations_total = self._cr.dictfetchall()
+            month_str = 'JAN'
 
+            if month == '01':
+                month_str = 'JAN'
+            elif month == '02':
+                month_str = 'FEB'
+            elif month == '03':
+                month_str = 'MAR'
+            elif month == '04':
+                month_str = 'APR'
+            elif month == '05':
+                month_str = 'MAY'
+            elif month == '06':
+                month_str = 'JUN'
+            elif month == '07':
+                month_str = 'JUL'
+            elif month == '08':
+                month_str = 'AUG'
+            elif month == '09':
+                month_str = 'SEP'
+            elif month == '10':
+                month_str = 'OCT'
+            elif month == '11':
+                month_str = 'NOV'
+            else:
+                month_str = 'DEC'
             rec_list = []
-            rec_list.append( user.name)
-            rec_list.append(month)
+            rec_list.append(user.name)
+            rec_list.append(month_str)
             rec_list.append(int(meetings[0]['count'])-int(missed_meeting[0]['count']))
             rec_list.append(meetings[0]['count'])
             rec_list.append(missed_meeting[0]['count'])
             rec_list.append(leads)
             if leads > 0:
-                rec_list.append(str(opportunity * 100 / leads) + "%")
+                rec_list.append(str(round(opportunity * 100 / leads, 2)) + "%")
             else:
                 rec_list.append(0)
             rec_list.append(opportunity)
@@ -520,10 +545,36 @@ class CRMLead(models.Model):
                 date_from, date_to, user.id))
             approved_quotations_total = self._cr.dictfetchall()
 
+            month_str = 'JAN'
+
+            if month == '01':
+                month_str = 'JAN'
+            elif month == '02':
+                month_str = 'FEB'
+            elif month == '03':
+                month_str = 'MAR'
+            elif month == '04':
+                month_str = 'APR'
+            elif month == '05':
+                month_str = 'MAY'
+            elif month == '06':
+                month_str = 'JUN'
+            elif month == '07':
+                month_str = 'JUL'
+            elif month == '08':
+                month_str = 'AUG'
+            elif month == '09':
+                month_str = 'SEP'
+            elif month == '10':
+                month_str = 'OCT'
+            elif month == '11':
+                month_str = 'NOV'
+            else:
+                month_str = 'DEC'
             rec_list = []
             rec_list.append(user.name)
-            rec_list.append(month)
-            if len(meetings) > 0 and len(missed_meeting) > 0 :
+            rec_list.append(month_str)
+            if len(meetings) > 0 and len(missed_meeting) > 0:
                 rec_list.append(int(meetings[0]['count']) - int(missed_meeting[0]['count']))
             else:
                 rec_list.append(0)
@@ -531,7 +582,7 @@ class CRMLead(models.Model):
             rec_list.append(missed_meeting[0]['count'])
             rec_list.append(leads)
             if leads > 0:
-                rec_list.append(str(opportunity * 100 / leads) + "%")
+                rec_list.append(str(round(opportunity * 100 / leads,2) + "%"))
             else:
                 rec_list.append(0)
             rec_list.append(opportunity)
@@ -558,6 +609,8 @@ class CRMLead(models.Model):
             top_revenue.append(rec_list)
 
         return {'top_revenue': top_revenue}
+
+
 
     @api.model
     def get_country_revenue(self):
