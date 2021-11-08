@@ -470,17 +470,17 @@ class CRMLead(models.Model):
             else:
                 rec_list.append(0)
             rec_list.append(new_quotations)
-            if len(new_quotations_total) > 0:
+            if len(new_quotations_total) > 0 and new_quotations_total[0]['sum']:
                 rec_list.append(new_quotations_total[0]['sum'])
             else:
                 rec_list.append(0)
             rec_list.append(submitted_quotations)
-            if len(submitted_quotations_total) > 0:
+            if len(submitted_quotations_total) > 0 and submitted_quotations_total[0]['sum']:
                 rec_list.append(submitted_quotations_total[0]['sum'])
             else:
                 rec_list.append(0)
             rec_list.append(approved_quotations)
-            if len(approved_quotations_total) > 0:
+            if len(approved_quotations_total) > 0 and approved_quotations_total[0]['sum']:
                 rec_list.append(approved_quotations_total[0]['sum'])
             else:
                 rec_list.append(0)
@@ -494,7 +494,7 @@ class CRMLead(models.Model):
         """Top 10 Salesperson revenue Table"""
         top_revenue = []
         next_month = str(int(month) + 1)
-        if int(month) < 10:
+        if int(month) < 9:
             next_month = '0'+str(int(month) + 1)
         date_from = datetime.now().strftime('%Y-'+str(month)+'-01')
         date_to = datetime.now().strftime('%Y-'+str(next_month)+'-01')
@@ -591,17 +591,17 @@ class CRMLead(models.Model):
             else:
                 rec_list.append(0)
             rec_list.append(new_quotations)
-            if len(new_quotations_total) > 0:
+            if len(new_quotations_total) > 0 and new_quotations_total[0]['sum']:
                 rec_list.append(new_quotations_total[0]['sum'])
             else:
                 rec_list.append(0)
             rec_list.append(submitted_quotations)
-            if len(submitted_quotations_total) > 0:
+            if len(submitted_quotations_total) > 0 and submitted_quotations_total[0]['sum']:
                 rec_list.append(submitted_quotations_total[0]['sum'])
             else:
                 rec_list.append(0)
             rec_list.append(approved_quotations)
-            if len(approved_quotations_total) > 0:
+            if len(approved_quotations_total) > 0 and approved_quotations_total[0]['sum']:
                 rec_list.append(approved_quotations_total[0]['sum'])
             else:
                 rec_list.append(0)
