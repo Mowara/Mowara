@@ -582,7 +582,7 @@ class CRMLead(models.Model):
             rec_list.append(missed_meeting[0]['count'])
             rec_list.append(leads)
             if leads > 0:
-                rec_list.append(str(round(opportunity * 100 / leads,2) + "%"))
+                rec_list.append(str(round(opportunity * 100 / leads, 2)) + "%")
             else:
                 rec_list.append(0)
             rec_list.append(opportunity)
