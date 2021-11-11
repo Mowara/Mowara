@@ -35,12 +35,13 @@ odoo.define('crm_dashboard.CRMDashboard', function (require) {
             'change #sp_summary_month': function(e) {
                 e.stopPropagation();
                 var $target = $(e.target);
+                var year= $('#sp_summary_year').val();
                 var value = $target.val();
-                if (value!="empty"){
+                if (value!="empty" && year !="empty"){
 					rpc.query({
 					model: 'crm.lead',
 					method: 'get_sp_month_summary',
-					args: [ $target.val()],
+					args: [ $target.val(), year],
 					})
 					.then(function (result) {
 
@@ -57,13 +58,14 @@ odoo.define('crm_dashboard.CRMDashboard', function (require) {
 								+'<td>'+record[5] +'</td>'
 								+'<td>'+record[6] +'</td>'
 								+'<td>'+record[7] +'</td>'
-								+'<td>'+record[8] +'$</td>'
-								+'<td>'+record[9] +'</td>'
-								+'<td>'+record[10] +'$</td>'
-								+'<td>'+record[11] +'</td>'
-								+'<td>'+record[12] +'$</td>'
-								+'<td>'+record[13] +'</td>'
-								+'<td>'+record[14] +'$</td>'
+								+'<td>  '+record[8] +'</td>'
+								+'<td> $ '+record[9] +'</td>'
+								+'<td>  '+record[10] +'</td>'
+								+'<td> $ '+record[11] +'</td>'
+								+'<td>  '+record[12] +'</td>'
+								+'<td> $ '+record[13] +'</td>'
+								+'<td> '+record[14] +'</td>'
+								+'<td> $ '+record[15] +'</td>'
 								+ '</tr>');
 							});
 
@@ -72,6 +74,49 @@ odoo.define('crm_dashboard.CRMDashboard', function (require) {
 
 
             },
+            'change #sp_summary_year': function(e) {
+                e.stopPropagation();
+                var $target = $(e.target);
+                var month= $('#sp_summary_month').val();
+                var value = $target.val();
+                if (month!="empty" && value!="empty"){
+					rpc.query({
+					model: 'crm.lead',
+					method: 'get_sp_month_summary',
+					args: [ month,$target.val()],
+					})
+					.then(function (result) {
+
+							$('.sp_revenue_row').remove();
+
+							$.each(result.top_revenue, function(i, record){
+							console.log(record);
+								$('#salesperson_revenue_table').append('<tr class="sp_revenue_row">'
+								+'<td>'+record[0] +'</td>'
+								+'<td>'+record[1] +'</td>'
+								+'<td>'+record[2] +'</td>'
+								+'<td>'+record[3] +'</td>'
+								+'<td>'+record[4] +'</td>'
+								+'<td>'+record[5] +'</td>'
+								+'<td>'+record[6] +'</td>'
+								+'<td>'+record[7] +'</td>'
+								+'<td>  '+record[8] +'</td>'
+								+'<td> $ '+record[9] +'</td>'
+								+'<td>  '+record[10] +'</td>'
+								+'<td> $ '+record[11] +'</td>'
+								+'<td>  '+record[12] +'</td>'
+								+'<td> $ '+record[13] +'</td>'
+								+'<td> '+record[14] +'</td>'
+								+'<td> $ '+record[15] +'</td>'
+								+ '</tr>');
+							});
+
+						});
+				}
+
+
+            },
+
             'change #total_loosed_crm': function(e) {
                 e.stopPropagation();
                 var $target = $(e.target);

@@ -382,137 +382,24 @@ class CRMLead(models.Model):
         return {'goals': goals}
 
     @api.model
-    def get_top_sp_revenue(self):
+    def get_sp_revenue(self, date_from, date_to, month):
         """Top 10 Salesperson revenue Table"""
         top_revenue = []
-        date_from = datetime.now().strftime('%Y-%m-01')
-        date_to = (datetime.now() + relativedelta(months=+1, day=1, days=-1)).strftime('%Y-%m-%d')
-        month = datetime.now().strftime('%m')
-        users = self.env['res.users'].search([('active', '=', True)])
-        for user in users:
-
-            self._cr.execute('''SELECT COUNT(*)	FROM public.calendar_event  where res_model = 'crm.lead' and create_date >= '%s' and create_date <= '%s'  and user_id=%s''' % (date_from, date_to, user.id))
-            meetings = self._cr.dictfetchall()
-            self._cr.execute('''select COUNT(*) from mail_activity
-                                 where res_model = 'crm.lead' and activity_type_id=3 and create_date >= '%s' and create_date <= '%s'and user_id = %s''' % (date_from, date_to, user.id))
-            missed_meeting = self._cr.dictfetchall()
-
-            self._cr.execute('''select  sum(expected_revenue) from crm_lead
-            where expected_revenue is not null and type = 'opportunity' and create_date >= '%s' and create_date <= '%s' AND  user_id = %s''' % (date_from, date_to, user.id))
-
-            opportunity_total = self._cr.dictfetchall()
-            leads = self.env['crm.lead'].search_count(
-                [('create_date', '>=', date_from), ('create_date', '<=', date_to), ('user_id', '=', user.id)])
-            opportunity = self.env['crm.lead'].search_count(
-                [('create_date', '>=', date_from), ('create_date', '<=', date_to), ('user_id', '=', user.id), ('type', '=', 'opportunity')])
-            new_quotations = self.env['sale.order'].search_count(
-                [('create_date', '>=', date_from), ('create_date', '<=', date_to), ('user_id', '=', user.id),
-                 ('state', '=', 'draft')])
-            self._cr.execute('''select  sum(amount_total) from sale_order
-                        where  state = 'draft' and create_date >= '%s' and create_date <= '%s' AND  user_id = %s''' % (date_from, date_to, user.id))
-            new_quotations_total = self._cr.dictfetchall()
-
-            submitted_quotations = self.env['sale.order'].search_count(
-                [('create_date', '>=', date_from), ('create_date', '<=', date_to), ('user_id', '=', user.id),
-                 ('state', '=', 'sent')])
-            self._cr.execute('''select  sum(amount_total) from sale_order
-                                    where  state = 'sent' and create_date >= '%s' and create_date <= '%s' AND  user_id = %s''' % (
-            date_from, date_to, user.id))
-            submitted_quotations_total = self._cr.dictfetchall()
-
-            approved_quotations = self.env['sale.order'].search_count(
-                [('create_date', '>=', date_from), ('create_date', '<=', date_to), ('user_id', '=', user.id),
-                 ('state', '=', 'sale')])
-            self._cr.execute('''select  sum(amount_total) from sale_order
-                                    where  state = 'sale' and create_date >= '%s' and create_date <= '%s' AND  user_id = %s''' % (
-            date_from, date_to, user.id))
-            approved_quotations_total = self._cr.dictfetchall()
-            month_str = 'JAN'
-
-            if month == '01':
-                month_str = 'JAN'
-            elif month == '02':
-                month_str = 'FEB'
-            elif month == '03':
-                month_str = 'MAR'
-            elif month == '04':
-                month_str = 'APR'
-            elif month == '05':
-                month_str = 'MAY'
-            elif month == '06':
-                month_str = 'JUN'
-            elif month == '07':
-                month_str = 'JUL'
-            elif month == '08':
-                month_str = 'AUG'
-            elif month == '09':
-                month_str = 'SEP'
-            elif month == '10':
-                month_str = 'OCT'
-            elif month == '11':
-                month_str = 'NOV'
-            else:
-                month_str = 'DEC'
-            rec_list = []
-            rec_list.append(user.name)
-            rec_list.append(month_str)
-            rec_list.append(int(meetings[0]['count'])-int(missed_meeting[0]['count']))
-            rec_list.append(meetings[0]['count'])
-            rec_list.append(missed_meeting[0]['count'])
-            rec_list.append(leads)
-            if leads > 0:
-                rec_list.append(str(round(opportunity * 100 / leads, 2)) + "%")
-            else:
-                rec_list.append(0)
-            rec_list.append(opportunity)
-            if len(opportunity_total) > 0:
-                rec_list.append(opportunity_total[0]['sum'])
-            else:
-                rec_list.append(0)
-            rec_list.append(new_quotations)
-            if len(new_quotations_total) > 0 and new_quotations_total[0]['sum']:
-                rec_list.append(new_quotations_total[0]['sum'])
-            else:
-                rec_list.append(0)
-            rec_list.append(submitted_quotations)
-            if len(submitted_quotations_total) > 0 and submitted_quotations_total[0]['sum']:
-                rec_list.append(submitted_quotations_total[0]['sum'])
-            else:
-                rec_list.append(0)
-            rec_list.append(approved_quotations)
-            if len(approved_quotations_total) > 0 and approved_quotations_total[0]['sum']:
-                rec_list.append(approved_quotations_total[0]['sum'])
-            else:
-                rec_list.append(0)
-
-            top_revenue.append(rec_list)
-
-        return {'top_revenue': top_revenue}
-
-    @api.model
-    def get_sp_month_summary(self, month):
-        """Top 10 Salesperson revenue Table"""
-        top_revenue = []
-        next_month = str(int(month) + 1)
-        if int(month) < 9:
-            next_month = '0'+str(int(month) + 1)
-        date_from = datetime.now().strftime('%Y-'+str(month)+'-01')
-        date_to = datetime.now().strftime('%Y-'+str(next_month)+'-01')
 
         users = self.env['res.users'].search([('active', '=', True)])
         for user in users:
 
             self._cr.execute(
-                '''SELECT COUNT(*)	FROM public.calendar_event  where res_model = 'crm.lead' and create_date >= '%s' and create_date < '%s'  and user_id=%s''' % (
+                '''SELECT COUNT(*)	FROM public.calendar_event  where res_model = 'crm.lead' and create_date >= '%s' and create_date <= '%s'  and user_id=%s''' % (
                 date_from, date_to, user.id))
             meetings = self._cr.dictfetchall()
             self._cr.execute('''select COUNT(*) from mail_activity
-                                    where res_model = 'crm.lead' and activity_type_id=3 and create_date >= '%s' and create_date < '%s'and user_id = %s''' % (
+                                    where res_model = 'crm.lead'  and create_date >= '%s' and create_date <= '%s'and user_id = %s''' % (
             date_from, date_to, user.id))
             missed_meeting = self._cr.dictfetchall()
 
             self._cr.execute('''select  sum(expected_revenue) from crm_lead
-               where expected_revenue is not null and type = 'opportunity' and create_date >= '%s' and create_date < '%s' AND  user_id = %s''' % (
+               where expected_revenue is not null and type = 'opportunity' and create_date >= '%s' and create_date <= '%s' AND  user_id = %s''' % (
             date_from, date_to, user.id))
 
             opportunity_total = self._cr.dictfetchall()
@@ -524,26 +411,37 @@ class CRMLead(models.Model):
             new_quotations = self.env['sale.order'].search_count(
                 [('create_date', '>=', date_from), ('create_date', '<', date_to), ('user_id', '=', user.id),
                  ('state', '=', 'draft')])
-            self._cr.execute('''select  sum(amount_total) from sale_order
-                           where  state = 'draft' and create_date >= '%s' and create_date < '%s' AND  user_id = %s''' % (
-            date_from, date_to, user.id))
+            self._cr.execute('''select  sum(amount_total / currency_rate) from sale_order
+                                         where  state = 'draft' and create_date >= '%s' and create_date < '%s' AND  user_id = %s''' % (
+                date_from, date_to, user.id))
             new_quotations_total = self._cr.dictfetchall()
 
             submitted_quotations = self.env['sale.order'].search_count(
                 [('create_date', '>=', date_from), ('create_date', '<', date_to), ('user_id', '=', user.id),
                  ('state', '=', 'sent')])
-            self._cr.execute('''select  sum(amount_total) from sale_order
-                                       where  state = 'sent' and create_date >= '%s' and create_date < '%s' AND  user_id = %s''' % (
+            self._cr.execute('''select  sum(amount_total / currency_rate) from sale_order
+                                                     where  state = 'sent' and create_date >= '%s' and create_date < '%s' AND  user_id = %s''' % (
                 date_from, date_to, user.id))
             submitted_quotations_total = self._cr.dictfetchall()
 
             approved_quotations = self.env['sale.order'].search_count(
                 [('create_date', '>=', date_from), ('create_date', '<', date_to), ('user_id', '=', user.id),
                  ('state', '=', 'sale')])
-            self._cr.execute('''select  sum(amount_total) from sale_order
-                                       where  state = 'sale' and create_date >= '%s' and create_date < '%s' AND  user_id = %s''' % (
+            self._cr.execute('''select  sum(amount_total / currency_rate) from sale_order
+                                                     where  state = 'sale' and create_date >= '%s' and create_date < '%s' AND  user_id = %s''' % (
                 date_from, date_to, user.id))
             approved_quotations_total = self._cr.dictfetchall()
+            quotations_total = new_quotations + submitted_quotations + approved_quotations
+            quotations_total_amount = 0
+
+            if len(new_quotations_total) > 0 and new_quotations_total[0]['sum']:
+                quotations_total_amount += float(new_quotations_total[0]['sum'])
+
+            if len(submitted_quotations_total) > 0 and submitted_quotations_total[0]['sum']:
+                quotations_total_amount += float(submitted_quotations_total[0]['sum'])
+
+            if len(approved_quotations_total) > 0 and approved_quotations_total[0]['sum']:
+                quotations_total_amount += float(approved_quotations_total[0]['sum'])
 
             month_str = 'JAN'
 
@@ -571,9 +469,11 @@ class CRMLead(models.Model):
                 month_str = 'NOV'
             else:
                 month_str = 'DEC'
+
             rec_list = []
             rec_list.append(user.name)
             rec_list.append(month_str)
+
             if len(meetings) > 0 and len(missed_meeting) > 0:
                 rec_list.append(int(meetings[0]['count']) - int(missed_meeting[0]['count']))
             else:
@@ -581,34 +481,59 @@ class CRMLead(models.Model):
             rec_list.append(meetings[0]['count'])
             rec_list.append(missed_meeting[0]['count'])
             rec_list.append(leads)
+            rec_list.append(opportunity)
             if leads > 0:
                 rec_list.append(str(round(opportunity * 100 / leads, 2)) + "%")
             else:
                 rec_list.append(0)
-            rec_list.append(opportunity)
-            if len(opportunity_total) > 0 and opportunity_total[0]['sum']:
-                rec_list.append(opportunity_total[0]['sum'])
-            else:
-                rec_list.append(0)
+
+            rec_list.append(quotations_total)
+            rec_list.append("{:10.2f}".format(quotations_total_amount))
             rec_list.append(new_quotations)
             if len(new_quotations_total) > 0 and new_quotations_total[0]['sum']:
-                rec_list.append(new_quotations_total[0]['sum'])
+                rec_list.append("{:10.2f}".format(new_quotations_total[0]['sum']))
             else:
                 rec_list.append(0)
             rec_list.append(submitted_quotations)
             if len(submitted_quotations_total) > 0 and submitted_quotations_total[0]['sum']:
-                rec_list.append(submitted_quotations_total[0]['sum'])
+                rec_list.append("{:10.2f}".format(submitted_quotations_total[0]['sum']))
             else:
                 rec_list.append(0)
             rec_list.append(approved_quotations)
             if len(approved_quotations_total) > 0 and approved_quotations_total[0]['sum']:
-                rec_list.append(approved_quotations_total[0]['sum'])
+                rec_list.append("{:10.2f}".format(approved_quotations_total[0]['sum']))
             else:
                 rec_list.append(0)
 
             top_revenue.append(rec_list)
 
-        return {'top_revenue': top_revenue}
+        return top_revenue
+
+    @api.model
+    def get_top_sp_revenue(self):
+        """Top 10 Salesperson revenue Table"""
+
+        date_from = datetime.now().strftime('%Y-%m-01')
+        date_to = (datetime.now() + relativedelta(months=+1, day=1, days=-1)).strftime('%Y-%m-%d')
+        month = datetime.now().strftime('%m')
+        return {'top_revenue': self.get_sp_revenue(date_from, date_to, month)}
+
+
+    @api.model
+    def get_sp_month_summary(self, month, year):
+        """Top 10 Salesperson revenue Table"""
+        top_revenue = []
+        next_month = str(int(month) + 1)
+
+        date_from = datetime.now().strftime(year+'-'+str(month)+'-01')
+        if int(month) < 9:
+            next_month = '0' + str(int(month) + 1)
+        elif int(month) == 12:
+            next_month = '01'
+            year = str(int(year) + 1)
+        date_to = datetime.now().strftime(year+'-'+str(next_month)+'-01')
+
+        return {'top_revenue': self.get_sp_revenue(date_from, date_to, month)}
 
 
 
@@ -668,7 +593,7 @@ class CRMLead(models.Model):
                 day_dict[i] = 0
 
             self._cr.execute('''select create_date::date,count(id) from crm_lead
-            where probability=0 and active=false and create_date between (now() - interval '1 month') and now()
+            where  type='opportunity' and create_date between (now() - interval '1 month') and now()
             group by create_date order by create_date;''')
             data = self._cr.dictfetchall()
 
@@ -909,7 +834,7 @@ class CRMLead(models.Model):
     def get_top_sp_by_invoice(self):
         """Top 10 Sales Person by Invoice Table"""
         self._cr.execute('''select user_id,sum(amount_total) as total
-        from sale_order where invoice_status='invoiced'
+        from sale_order where state = 'sale'
         group by user_id order by total desc limit 10''')
         data1 = self._cr.fetchall()
 
