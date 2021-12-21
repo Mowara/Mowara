@@ -386,7 +386,7 @@ class CRMLead(models.Model):
         """Top 10 Salesperson revenue Table"""
         top_revenue = []
 
-        users = self.env['res.users'].search([('active', '=', True)])
+        users = self.env['res.users'].search([('active', '=', True),('share','=',False)])
         for user in users:
 
             self._cr.execute(
@@ -517,6 +517,57 @@ class CRMLead(models.Model):
         date_to = (datetime.now() + relativedelta(months=+1, day=1, days=-1)).strftime('%Y-%m-%d')
         month = datetime.now().strftime('%m')
         return {'top_revenue': self.get_sp_revenue(date_from, date_to, month)}
+
+    def get_top_sp_revenue_string(self):
+        """Top 10 Salesperson revenue Table"""
+
+        date_from = datetime.now().strftime('%Y-%m-01')
+        date_to = (datetime.now() + relativedelta(months=+1, day=1, days=-1)).strftime('%Y-%m-%d')
+        month = datetime.now().strftime('%m')
+        result = '<table class="table table-hover" id="salesperson_revenue_table" style="text-align:center;">'
+        result += '                           <thead>'
+        result += '                                <tr>'
+        result += '                                    <th rowspan="3">Sales Rep</th>'
+        result += '                                    <th rowspan="3">Month</th>'
+        result += '                                    <th colspan="3">Field Work</th>'
+        result += '                                    <th colspan="3">Leads</th>'
+        result += '                                    <th colspan="8">Sales</th>'
+        result += '                                </tr>'
+        result += '                                <tr>'
+        result += '                                    <th colspan="3">Visits/Calls</th>'
+        result += '                                    <th colspan="1" rowspan="2">New Leads</th>'
+        result += '                                    <th colspan="1" rowspan="2">New Opportunities</th>'
+        result += '                                    <th colspan="1" rowspan="2">Conversions </th>'
+        result += '                                    <th colspan="2">Total Quotes</th>'
+        result += '                                    <th colspan="2">Submitted Quotes</th>'
+        result += '                                    <th colspan="2">Approved Quotes</th>'
+        result += '                                    <th colspan="2">New (Created) Quotes</th>'
+        result += '                                </tr>'
+        result += '                                <tr>'
+        result += '                                    <th >Actual</th>'
+        result += '                                    <th >Planned</th>'
+        result += '                                    <th >Missed</th>'
+        result += '                                    <th >Qty</th>'
+        result += '                                    <th >Value</th>'
+        result += '                                    <th >Qty</th>'
+        result += '                                    <th >Value</th>'
+        result += '                                    <th >Qty</th>'
+        result += '                                    <th >Value</th>'
+        result += '                                    <th >Qty</th>'
+        result += '                                    <th >Value</th>'
+        result += '                                </tr>'
+        result += '                            </thead>'
+        result += '                            <tbody>'
+        for row in self.get_sp_revenue(date_from, date_to, month):
+
+            result += '<tr class="sp_revenue_row">'
+            for x in row:
+                result += '<td>' + str(x) + '</td>'
+
+            result += '</tr>'
+        result += '</tbody>'
+        result += '</table>'
+        return result
 
 
     @api.model
