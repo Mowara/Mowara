@@ -62,10 +62,7 @@ odoo.define('crm_dashboard.CRMDashboard', function (require) {
 								+'<td> $ '+record[9] +'</td>'
 								+'<td>  '+record[10] +'</td>'
 								+'<td> $ '+record[11] +'</td>'
-								+'<td>  '+record[12] +'</td>'
-								+'<td> $ '+record[13] +'</td>'
-								+'<td> '+record[14] +'</td>'
-								+'<td> $ '+record[15] +'</td>'
+
 								+ '</tr>');
 							});
 
@@ -104,10 +101,7 @@ odoo.define('crm_dashboard.CRMDashboard', function (require) {
 								+'<td> $ '+record[9] +'</td>'
 								+'<td>  '+record[10] +'</td>'
 								+'<td> $ '+record[11] +'</td>'
-								+'<td>  '+record[12] +'</td>'
-								+'<td> $ '+record[13] +'</td>'
-								+'<td> '+record[14] +'</td>'
-								+'<td> $ '+record[15] +'</td>'
+
 								+ '</tr>');
 							});
 

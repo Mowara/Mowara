@@ -487,13 +487,13 @@ class CRMLead(models.Model):
             else:
                 rec_list.append(0)
 
-            rec_list.append(quotations_total)
-            rec_list.append("{:10.2f}".format(quotations_total_amount))
-            rec_list.append(new_quotations)
-            if len(new_quotations_total) > 0 and new_quotations_total[0]['sum']:
-                rec_list.append("{:10.2f}".format(new_quotations_total[0]['sum']))
-            else:
-                rec_list.append(0)
+            #rec_list.append(quotations_total)
+            #rec_list.append("{:10.2f}".format(quotations_total_amount))
+           # rec_list.append(new_quotations)
+           # if len(new_quotations_total) > 0 and new_quotations_total[0]['sum']:
+               # rec_list.append("{:10.2f}".format(new_quotations_total[0]['sum']))
+           # else:
+               # rec_list.append(0)
             rec_list.append(submitted_quotations)
             if len(submitted_quotations_total) > 0 and submitted_quotations_total[0]['sum']:
                 rec_list.append("{:10.2f}".format(submitted_quotations_total[0]['sum']))
@@ -538,19 +538,13 @@ class CRMLead(models.Model):
         result += '                                    <th colspan="1" rowspan="2">New Leads</th>'
         result += '                                    <th colspan="1" rowspan="2">New Opportunities</th>'
         result += '                                    <th colspan="1" rowspan="2">Conversions </th>'
-        result += '                                    <th colspan="2">Total Quotes</th>'
         result += '                                    <th colspan="2">Submitted Quotes</th>'
         result += '                                    <th colspan="2">Approved Quotes</th>'
-        result += '                                    <th colspan="2">New (Created) Quotes</th>'
         result += '                                </tr>'
         result += '                                <tr>'
         result += '                                    <th >Actual</th>'
         result += '                                    <th >Planned</th>'
         result += '                                    <th >Missed</th>'
-        result += '                                    <th >Qty</th>'
-        result += '                                    <th >Value</th>'
-        result += '                                    <th >Qty</th>'
-        result += '                                    <th >Value</th>'
         result += '                                    <th >Qty</th>'
         result += '                                    <th >Value</th>'
         result += '                                    <th >Qty</th>'

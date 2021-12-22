@@ -259,11 +259,11 @@
                                     <th colspan='1' rowspan='2'>New Opportunities</th>
                                     <th colspan='1' rowspan='2'>Conversions </th>
 
-                                    <th colspan='2'>Total Quotes</th>
+
 
                                     <th colspan='2'>Submitted Quotes</th>
                                     <th colspan='2'>Approved Quotes</th>
-                                    <th colspan='2'>New (Created) Quotes</th>
+
 
                                 </tr>
                                 <tr>
@@ -275,10 +275,7 @@
                                     <th >Value</th>
                                     <th >Qty</th>
                                     <th >Value</th>
-                                    <th >Qty</th>
-                                    <th >Value</th>
-                                    <th >Qty</th>
-                                    <th >Value</th>
+
 
 
                                 </tr>
@@ -298,10 +295,7 @@
                                         <td> $ <t t-esc="activity[9]"/></td>
                                         <td><t t-esc="activity[10]"/></td>
                                         <td> $ <t t-esc="activity[11]"/></td>
-                                        <td><t t-esc="activity[12]"/></td>
-                                        <td> $ <t t-esc="activity[13]"/></td>
-                                        <td><t t-esc="activity[14]"/></td>
-                                        <td> $ <t t-esc="activity[15]"/></td>
+
 
 
                                     </tr>
