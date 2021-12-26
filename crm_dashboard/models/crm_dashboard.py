@@ -21,6 +21,7 @@
 #############################################################################
 import datetime
 import calendar
+import locale
 
 from odoo import models, fields, api
 from odoo.tools import date_utils
@@ -385,7 +386,7 @@ class CRMLead(models.Model):
     def get_sp_revenue(self, date_from, date_to, month):
         """Top 10 Salesperson revenue Table"""
         top_revenue = []
-
+        locale.setlocale(locale.LC_ALL, 'en_US')
         users = self.env['res.users'].search([('active', '=', True),('share','=',False)])
         for user in users:
 
@@ -496,12 +497,15 @@ class CRMLead(models.Model):
                # rec_list.append(0)
             rec_list.append(submitted_quotations)
             if len(submitted_quotations_total) > 0 and submitted_quotations_total[0]['sum']:
-                rec_list.append("{:10.2f}".format(submitted_quotations_total[0]['sum']))
+                #rec_list.append("{:10.2f}".format(submitted_quotations_total[0]['sum']))
+                rec_list.append(locale.format("%d",submitted_quotations_total[0]['sum'], grouping=True))
             else:
                 rec_list.append(0)
             rec_list.append(approved_quotations)
             if len(approved_quotations_total) > 0 and approved_quotations_total[0]['sum']:
-                rec_list.append("{:10.2f}".format(approved_quotations_total[0]['sum']))
+                #rec_list.append("{:10.2f}".format(approved_quotations_total[0]['sum']))
+                rec_list.append(locale.format("%d", approved_quotations_total[0]['sum'], grouping=True))
+
             else:
                 rec_list.append(0)
 
@@ -878,9 +882,10 @@ class CRMLead(models.Model):
     @api.model
     def get_top_sp_by_invoice(self):
         """Top 10 Sales Person by Invoice Table"""
+        year = datetime.now().strftime('%Y-%m-01')
         self._cr.execute('''select user_id,sum(amount_total / currency_rate) as total
-        from sale_order where state = 'sale'
-        group by user_id order by total desc limit 10''')
+        from sale_order where state = 'sale' and create_date >= '%s'
+        group by user_id order by total desc limit 10''' % year)
         data1 = self._cr.fetchall()
 
         sales_person_invoice = []
