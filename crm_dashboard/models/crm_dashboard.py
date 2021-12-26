@@ -386,7 +386,7 @@ class CRMLead(models.Model):
     def get_sp_revenue(self, date_from, date_to, month):
         """Top 10 Salesperson revenue Table"""
         top_revenue = []
-        locale.setlocale(locale.LC_ALL, 'en_US')
+        #locale.setlocale(locale.LC_ALL, 'en_US')
         users = self.env['res.users'].search([('active', '=', True),('share','=',False)])
         for user in users:
 
