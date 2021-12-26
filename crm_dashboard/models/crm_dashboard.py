@@ -882,7 +882,7 @@ class CRMLead(models.Model):
     @api.model
     def get_top_sp_by_invoice(self):
         """Top 10 Sales Person by Invoice Table"""
-        year = datetime.now().strftime('%Y-%m-01')
+        year = datetime.now().strftime('%Y-01-01')
         self._cr.execute('''select user_id,sum(amount_total / currency_rate) as total
         from sale_order where state = 'sale' and create_date >= '%s'
         group by user_id order by total desc limit 10''' % year)
