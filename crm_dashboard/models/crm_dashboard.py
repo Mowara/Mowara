@@ -528,7 +528,7 @@ class CRMLead(models.Model):
         date_from = datetime.now().strftime('%Y-%m-01')
         date_to = (datetime.now() + relativedelta(months=+1, day=1, days=-1)).strftime('%Y-%m-%d')
         month = datetime.now().strftime('%m')
-        result = '<table class="table table-hover" id="salesperson_revenue_table" style="text-align:center;">'
+        result = '<table class="table table-hover" id="salesperson_revenue_table" style="text-align:center;" cellpadding="0" cellspacing="0" width="640" align="center" border="1">'
         result += '                           <thead>'
         result += '                                <tr>'
         result += '                                    <th rowspan="3">Sales Rep</th>'
